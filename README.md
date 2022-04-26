@@ -16,6 +16,26 @@
 
 ### 요구사항 1 - http://localhost:8080/index.html로 접속시 응답
 * 
+```java
+InputStreamReader reader = new InputStreamReader(in);
+            BufferedReader bufferedReader = new BufferedReader(reader);//
+            String line = bufferedReader.readLine();
+            if (line == null){return;}
+            /*while(!"".equals(line)){
+                line = bufferedReader.readLine();
+                System.out.println(line);
+            }*/
+            String[] tokens = line.split(" ");
+            byte[] body;
+            if (tokens[1].equals("/index.html")==true){
+                String url = tokens[1];
+                body = Files.readAllBytes(new File("./webapp"+url).toPath());
+            }
+```
+요구사항을 해결하면서 작성한 코드이다.
+기존에 소켓통신에 대한 이해가 부족하여서 처음 요구사항을 받았을때 매우 막막하였다.
+통신할때 HTTP헤더가 인풋스트림을 통해서 들어온다는 사실또한 새롭게 알게되었다.
+인풋스트림을 가공하여 Mapping의 가동원리를 알게되었다.
 
 ### 요구사항 2 - get 방식으로 회원가입
 * 

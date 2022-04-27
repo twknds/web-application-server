@@ -39,13 +39,45 @@ InputStreamReader reader = new InputStreamReader(in);
 
 ### 요구사항 2 - get 방식으로 회원가입
 * 
+```java
+                int index = url.indexOf("?");
+                String queryString = url.substring(index+1);
+                Map<String, String> param = HttpRequestUtils.parseQueryString(queryString);
+                User user = new User(param.get("userId"),param.get("password"),param.get("name"),param.get("email"));
+```
+GET 으로 회원가입 요청이 오게되면 http 헤더에 정보가 붙어서 오게되는대 이 헤더값을 파싱해서 회원가입 정보를 얻어내는 방식을 사용하였다.
+GET요청이 들어오게 되면 기존에 /index.html 리다이렉트와 마찬가지로 url(회원가입)뒤에 ?가 붙고 그뒤에 정보가 붙어서 나오는 방식이었다.
+그뒤에는 단순히 split을 통해서 뒷정보를 추출하고 parseQueryString을 이용하여 자동으로 정보가 구분되었다.
 
 ### 요구사항 3 - post 방식으로 회원가입
 * 
-
+```java
+                String queryString = util.IOUtils.readData(bufferedReader, cl);
+                Map<String, String> param = HttpRequestUtils.parseQueryString(queryString);
+                User user = new User(param.get("userId"),param.get("password"),param.get("name"),param.get("email"));
+```
+이거는 위의 GET방식에서 단순히 POST형식으로 바뀌면서 Header에 붙어오던 정보들이 Body에 붙어오게 되었다.
+Body부를 읽기위해서는 Content-Length가 필요해서 Line을 읽으면서 Context-Length부를 찾아내서 그값을 추출해야했다.
+추출한뒤 이를 readData에 넣고 돌리면 queryString이 나오는 방식, 후에는 위의 GET방식과 동일한 절차로 진행되었다.
 ### 요구사항 4 - redirect 방식으로 이동
 * 
-
+```java
+                DataOutputStream dos = new DataOutputStream(out);
+                response302Header(dos, "/index.html");
+                -------------------------------------------------
+    private void response302Header(DataOutputStream dos, String url) {
+        try {
+            dos.writeBytes("HTTP/1.1 302 Redirect \r\n");
+            dos.writeBytes("Location: "+url+" \r\n");
+            dos.writeBytes("\r\n");
+        } catch (IOException e) {
+            log.error(e.getMessage());
+        }
+    }                
+```
+url값만 바꿔줄시에는 body부에 저장된정보가 사라지지않기 때문에 url이 변경되더라도 계속하여 회원가입 요청시의 body값이 넘어오게된다.
+이를 위해서 HTTP_302를 호출하여 리다이렉트를 해줄필요가 있다는것을 알았다.
+반대로 GET요청이었다면 그냥 302호출없이 리다이렉트가 가능했을것 같다는 생각이 들었다.
 ### 요구사항 5 - cookie
 * 
 

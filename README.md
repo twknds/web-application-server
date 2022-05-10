@@ -79,7 +79,50 @@ url값만 바꿔줄시에는 body부에 저장된정보가 사라지지않기 �
 이를 위해서 HTTP_302를 호출하여 리다이렉트를 해줄필요가 있다는것을 알았다.
 반대로 GET요청이었다면 그냥 302호출없이 리다이렉트가 가능했을것 같다는 생각이 들었다.
 ### 요구사항 5 - cookie
-* 
+
+```java
+else if (url.equals("/user/login")){
+                String queryString = util.IOUtils.readData(bufferedReader, cl);
+                Map<String, String> param = HttpRequestUtils.parseQueryString(queryString);
+                User user = DataBase.findUserById(param.get("userId"));
+                if( user == null){
+                    responseResource(out,"/user/login_failed.html");
+                    return;
+                }
+                if(user.getPassword().equals(param.get("password"))){
+                    DataOutputStream dos = new DataOutputStream(out);
+                    response302login(dos);
+                }else{
+                    responseResource(out,"/user/login_failed.html");
+                }
+            }
+...
+private void responseResource(OutputStream out, String url) throws IOException {
+        try {
+            byte[] body = Files.readAllBytes(new File("./webapp" + url).toPath());
+            DataOutputStream dos = new DataOutputStream(out);
+            response200Header(dos, body.length);
+            responseBody(dos, body);
+        } catch (IOException e) {
+            log.error(e.getMessage());
+        }
+    }
+    private void response302login(DataOutputStream dos) {
+        try {
+            dos.writeBytes("HTTP/1.1 302 Redirect \r\n");
+            dos.writeBytes("Set-Cookie: logined=true \r\n");
+            dos.writeBytes("Location: /index.html \r\n");
+            dos.writeBytes("\r\n");
+        } catch (IOException e) {
+            log.error(e.getMessage());
+        }
+    }
+         
+```
+앞에서 했던 과제들의 내용을 활용하여 진행해야 했던 과제였다.
+실질적으로 구현해야 했던 부분은 header를 response해주는 부분이었다.
+로그인이 실패했을경우에는 http200으로 response해주고 login_failed.html로 redirect해주었다.
+성공했을시에는 http302로 response후 Set-Cookie값을 true로 바꿔주고 index.html로 redirect해주었다.
 
 ### 요구사항 6 - stylesheet 적용
 * 

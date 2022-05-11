@@ -124,8 +124,44 @@ private void responseResource(OutputStream out, String url) throws IOException {
 로그인이 실패했을경우에는 http200으로 response해주고 login_failed.html로 redirect해주었다.
 성공했을시에는 http302로 response후 Set-Cookie값을 true로 바꿔주고 index.html로 redirect해주었다.
 
+-------------------------------------------------
+cookie값의 확인을 통해서 현재 로그인된 계정을 받아오는 과제를 받고나서 서버에서 직접적으로 Html파일소스를 건들수 있다는 것을 처음으로 알게되었다.
+```java
+else if(url.equals("/user/list")){
+                   if(logined!=true){
+                       responseResource(out,"/user/login.html");
+                       return;
+                   }
+                   Collection<User> users = DataBase.findAll();
+                   StringBuilder sb = new StringBuilder();
+                   sb.append("<table border='1'>");
+                   for (User user: users){
+                       sb.append("<tr>");
+                       sb.append("<td>"+user.getUserId()+"</td>");
+                       sb.append("<td>"+user.getName()+"</td>");
+                       sb.append("<td>"+user.getEmail()+"</td>");
+                       sb.append("</tr>");
+                   }
+                   sb.append("</table>");
+                   body = sb.toString().getBytes();
+                   DataOutputStream dos = new DataOutputStream(out);
+                   response200Header(dos, body.length);
+                   responseBody(dos, body);
+            }
+```
+버퍼리더로 부터 읽어온값으로부터 cookie접두사를 찾아서 로그인쿠키값의 확인을 통해서 로그인유무를 판단하였다.
+로그인 여부를 판단한후 /user/list헤더로 접속하게 되면 비로그인시 login.html로 리다이렉트 시키고 로그인된 계정이면 html로 StringBuilder를 통해서 엔티티의 get메소드를 통해서 사용자 정보를 읽어온후 코드를 전송해준다.
 ### 요구사항 6 - stylesheet 적용
-* 
+```java
+else if(url.endsWith(".css")){
+                body = Files.readAllBytes(new File("./webapp" + url).toPath());
+                DataOutputStream dos = new DataOutputStream(out);
+                response200cssHeader(dos, body.length);
+                responseBody(dos, body);
+            }
+```
+css 스타일시트 적용은 앞의 과제들에 비하면 상당히 가벼운 과제였다.
+단순히 http response값만 text/html -> text/css로만 바꿔주면 알아서 css파일을 적용시켜주었다.
 
 ### heroku 서버에 배포 후
 * 

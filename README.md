@@ -14,23 +14,41 @@
 * 구현을 완료한 후 구현 과정에서 새롭게 알게된 내용, 궁금한 내용을 기록한다.
 * 각 요구사항을 구현하는 것이 중요한 것이 아니라 구현 과정을 통해 학습한 내용을 인식하는 것이 배움에 중요하다. 
 
-### 요구사항 1 - http://localhost:8080/index.html로 접속시 응답
-* 
-
-### 요구사항 2 - get 방식으로 회원가입
-* 
-
-### 요구사항 3 - post 방식으로 회원가입
-* 
-
-### 요구사항 4 - redirect 방식으로 이동
-* 
-
-### 요구사항 5 - cookie
-* 
-
-### 요구사항 6 - stylesheet 적용
-* 
+HttpRequest기능 분할 코드
+```
+private static final Logger log = LoggerFactory.getLogger(HttpRequest.class);
+    private String method;
+    private String path;
+    private Map<String,String> headers = new HashMap<String,String>();
+    private Map<String,String> params = new HashMap<String,String>();
+    private RequestLine requestLine;
+    public HttpRequest(InputStream in){
+        try{
+            BufferedReader br = new BufferedReader(new InputStreamReader(in,"UTF-8"));
+            String line = br.readLine();
+            if(line==null){
+                return;
+            }
+            requestLine = new RequestLine(line);
+            line = br.readLine();
+            while(!line.equals("")){
+                log.debug("header : {}",line);
+                String[] tokens = line.split(":");
+                headers.put(tokens[0].trim(),tokens[1].trim());
+                line=br.readLine();
+            }
+            if("POST".equals(method)){
+                String body = IOUtils.readData(br,Integer.parseInt(headers.get("Content-Length")));
+                params = HttpRequestUtils.parseQueryString(body);
+            }else{
+                params = requestLine.getParams();
+            }
+        }catch(IOException e){
+            log.error(e.getMessage());
+        }
+    }
+    ```
+    *객체지향
 
 ### heroku 서버에 배포 후
 * 

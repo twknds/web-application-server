@@ -1,21 +1,7 @@
-# 실습을 위한 개발 환경 세팅
-* https://github.com/slipp/web-application-server 프로젝트를 자신의 계정으로 Fork한다. Github 우측 상단의 Fork 버튼을 클릭하면 자신의 계정으로 Fork된다.
-* Fork한 프로젝트를 eclipse 또는 터미널에서 clone 한다.
-* Fork한 프로젝트를 eclipse로 import한 후에 Maven 빌드 도구를 활용해 eclipse 프로젝트로 변환한다.(mvn eclipse:clean eclipse:eclipse)
-* 빌드가 성공하면 반드시 refresh(fn + f5)를 실행해야 한다.
-
-# 웹 서버 시작 및 테스트
-* webserver.WebServer 는 사용자의 요청을 받아 RequestHandler에 작업을 위임하는 클래스이다.
-* 사용자 요청에 대한 모든 처리는 RequestHandler 클래스의 run() 메서드가 담당한다.
-* WebServer를 실행한 후 브라우저에서 http://localhost:8080으로 접속해 "Hello World" 메시지가 출력되는지 확인한다.
-
-# 각 요구사항별 학습 내용 정리
-* 구현 단계에서는 각 요구사항을 구현하는데 집중한다. 
-* 구현을 완료한 후 구현 과정에서 새롭게 알게된 내용, 궁금한 내용을 기록한다.
-* 각 요구사항을 구현하는 것이 중요한 것이 아니라 구현 과정을 통해 학습한 내용을 인식하는 것이 배움에 중요하다. 
 
 
 ## servlet interface구현 
+
 ```
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -26,7 +12,13 @@ public interface Controller {
 ```
 이를 통해서 Controllerinterface를 상속받는 기능별 controller를 구현할수 있었다.
 
-```
+
+<details>
+<summary>dispatcherServlet Code</summary>
+<div markdown="1">
+
+```java
+    
 import java.io.IOException;
 
 import javax.servlet.RequestDispatcher;
@@ -81,6 +73,10 @@ public class DispatcherServlet extends HttpServlet {
 }
 
 ```
+</div>
+</details>
+
+
 HttpServlet을 상속받아 코딩한 디스패처서블렛이다.
 
 @WebServlet 어노테이션을 통해서 /로 매핑된 모든 URL이 디스패처서블릿으로 연결된다. 
@@ -89,7 +85,13 @@ HttpServlet을 상속받아 코딩한 디스패처서블렛이다.
 
 아래 필터 코드를 통해서 확인할수 있다.
 
-```
+<details>
+<summary>filter code</summary>
+<div markdown="1">
+
+
+```java
+    
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -155,6 +157,9 @@ public class ResourceFilter implements Filter {
 }
 
 ```
+</div>
+</details>
+    
 css나 js등 정적 자원의 처리의 경우는 디스패처 서블릿으로 가기전 톰캣 Default Servlet으로 통하도록 필터를 통해서 가로채고 있다.
 
 위의 디스패처서블릿 코드를 통해서 Default Servlet을 재정의 하고있고 모든 요청들을 각각 컨트롤러들에게 위임하고 있다.
@@ -164,6 +169,11 @@ jsp에 대한 요청은 forward컨트롤러 하나로 묶어서 별도의 비즈
 이와같이 디스패처 서블릿을 통해서 구현한 MVC패턴을 프론트 컨트롤러 패턴이라고 하며, 각컨트롤러 앞에서 프론트 컨트롤러가 모든 작업을 위임하는 방식이다.
 
 아래는 request Mapping코드이다.
+    
+<details>
+<summary>requestMapping code</summary>
+<div markdown="1">
+
 ```
 import java.util.HashMap;
 import java.util.Map;
@@ -208,4 +218,5 @@ public class RequestMapping {
     }
 }
 ```
-
+</div>
+</details>

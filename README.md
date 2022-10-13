@@ -14,23 +14,14 @@
 * 구현을 완료한 후 구현 과정에서 새롭게 알게된 내용, 궁금한 내용을 기록한다.
 * 각 요구사항을 구현하는 것이 중요한 것이 아니라 구현 과정을 통해 학습한 내용을 인식하는 것이 배움에 중요하다. 
 
-### 요구사항 1 - http://localhost:8080/index.html로 접속시 응답
-* 
+## servlet interface구현 
+```
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
-### 요구사항 2 - get 방식으로 회원가입
-* 
+public interface Controllerinterface {
+    String execute(HttpServletRequest req, HttpServletResponse res) throws Exception;
+}
+```
+이를 통해서 Controllerinterface를 상속받는 Controller를 구현할수있다.
 
-### 요구사항 3 - post 방식으로 회원가입
-* 
-
-### 요구사항 4 - redirect 방식으로 이동
-* 
-
-### 요구사항 5 - cookie
-* 
-
-### 요구사항 6 - stylesheet 적용
-* 
-
-### heroku 서버에 배포 후
-* 

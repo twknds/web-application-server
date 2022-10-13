@@ -1,6 +1,6 @@
 
 <details>
-<summary>## HttpRequest기능 분할 코드</summary>
+<summary>HttpRequest기능 분할 코드</summary>
 <div markdown="1">
 
 ```java
@@ -41,9 +41,11 @@ private static final Logger log = LoggerFactory.getLogger(HttpRequest.class);
 </div>
 </details>
 
+<details>
+<summary>객체지향프로그래밍을 하기위해서 클라이언트로부터 요청을 받는 기능만을 구분해서 구현</summary>
+<div markdown="1">
 
 
-객체지향프로그래밍을 하기위해서 클라이언트로부터 요청을 받는 기능만을 구분해서 구현
 ```java
 public RequestLine(String requestLine){
         log.debug("request line : {}",requestLine);
@@ -65,8 +67,16 @@ public RequestLine(String requestLine){
         }
     }
 ```
+
 요청코드를 헤더를 분리하는 기능을 httprequest에서 리팩토링
-HttpResponse기능 분할 코드
+
+</div>
+</details>   
+    
+    
+<details>
+<summary>HttpResponse기능 분할 코드</summary>
+<div markdown="1">
 ```java
 private static final Logger log = LoggerFactory.getLogger(HttpResponse.class);
     private DataOutputStream dos = null;
@@ -106,4 +116,8 @@ private static final Logger log = LoggerFactory.getLogger(HttpResponse.class);
     }
 ```
 클라이언트에게 응답하는 기능만을 구분해서 구현
+    
+
+</div>
+</details>   
 

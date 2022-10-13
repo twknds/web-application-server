@@ -14,6 +14,9 @@
 * 구현을 완료한 후 구현 과정에서 새롭게 알게된 내용, 궁금한 내용을 기록한다.
 * 각 요구사항을 구현하는 것이 중요한 것이 아니라 구현 과정을 통해 학습한 내용을 인식하는 것이 배움에 중요하다. 
 
+쿠키값을 활용해 sessionID를 주고받으며 Session의 동작방식에 대해서 알수있었다.
+아래는 HTTPrequest처리 코드이다.
+
 ```
 import java.io.BufferedReader;
 import java.io.IOException;

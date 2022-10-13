@@ -77,7 +77,8 @@ public RequestLine(String requestLine){
 <details>
 <summary>HttpResponse기능 분할 코드</summary>
 <div markdown="1">
-```java
+    
+```
 private static final Logger log = LoggerFactory.getLogger(HttpResponse.class);
     private DataOutputStream dos = null;
     private Map<String,String> headers = new HashMap<String,String>();

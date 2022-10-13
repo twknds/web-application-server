@@ -97,6 +97,3 @@ private static final Logger log = LoggerFactory.getLogger(HttpResponse.class);
 ```
 클라이언트에게 응답하는 기능만을 구분해서 구현
 
-
-### heroku 서버에 배포 후
-* 
